@@ -1,6 +1,6 @@
 import sys
 sys.path.append("/Users/udayanjoshi/opencv/build/lib")
-
+#captures video in black and white
 import cv2
 camera = cv2.VideoCapture(1) # input can be 0,1,2 depending on settings..
 while True:
