@@ -1,6 +1,6 @@
 import sys
 sys.path.append("/Users/udayanjoshi/opencv/build/lib")
-
+#shows video in colour
 import cv2
 
 cv2.namedWindow("preview")
