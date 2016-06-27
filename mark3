@@ -1,0 +1,201 @@
+import math
+class point:
+
+    def __init__(self,x=0,y=0):
+        self.x=x
+        self.y=y
+    def show(self):
+        return list((self.x,self.y))
+        
+def dist(p1,p2):
+    return math.hypot(p1.x-p2.x,p1.y-p2.y)
+    
+    
+def slope(p1,p2):
+    return (p1.y-p2.y)/float((p1.x-p2.x))
+    
+class line:
+
+    def __init__(self,p1=point(0,0),p2=point(0,0)):
+        self.p1=p1
+        self.p2=p2
+        
+
+def intersectx(l1,l2):
+    x1=float(l1.p1.x)
+    x2=float(l1.p2.x)
+    y1=float(l1.p1.y)
+    y2=float(l1.p2.y)
+    x3=float(l2.p1.x)
+    x4=float(l2.p2.x)
+    y3=float(l2.p1.y)
+    y4=float(l2.p2.y)
+    
+    
+    a=(x1*y2-y1*x2)*(x3-x4)
+    b=(x1-x2)*(x3*y4-y3*x4)
+    c=(x1-x2)*(y3-y4)
+    d=(y1-y2)*(x3-x4)
+    p=(x1*y2-y1*x2)*(y3-y4)
+    q=(y1-y2)*(x3*y4-y3*x4)
+    if c!=d:
+        return float((a-b))/(c-d)
+    
+def intersecty(l1,l2):
+    x1=float(l1.p1.x)
+    x2=float(l1.p2.x)
+    y1=float(l1.p1.y)
+    y2=float(l1.p2.y)
+    x3=float(l2.p1.x)
+    x4=float(l2.p2.x)
+    y3=float(l2.p1.y)
+    y4=float(l2.p2.y)
+    
+    
+    a=(x1*y2-y1*x2)*(x3-x4)
+    b=(x1-x2)*(x3*y4-y3*x4)
+    c=(x1-x2)*(y3-y4)
+    d=(y1-y2)*(x3-x4)
+    p=(x1*y2-y1*x2)*(y3-y4)
+    q=(y1-y2)*(x3*y4-y3*x4)
+    if c!=d:
+        return (p-q)/(c-d)
+def theta(l1,l2):
+    m1=slope(l1.p1,l1.p2)
+    m2=slope(l2.p1,l2.p2)
+    angle=(m1-m2)/(1.0+m1*m2)
+    return math.degrees(math.atan(angle))
+    
+    
+#coin=point(circles[0],-circles[1])
+coin=point(600,-600) #random
+'''The co-ordinates of the holes are (0,0),(0,-1171),(1172,0),(1172,-1171) ***(these nums will change later)*** . The co-ordinates of the end-points strip are (213,-1012) and (953,-1012)'''
+
+def near(x):
+    if x-int(x)>0.5:
+        return int(x)+1
+    else:
+        return int(x)
+
+'''def measure(hole):                            imp function will use parts later
+    p1=point(213,-1012)
+    p2=point(953,-1012)
+    l1=line(p1,p2)
+    l2=line(hole,coin)
+    pos=range(213,953,37)
+    xpoint=intersectx(l1,l2)
+    
+    rpoint=(xpoint-213)/37.0
+    
+    if rpoint<0:
+        actualp=0
+    elif rpoint>20:
+        actualp=20
+    else :
+        actualp=near(rpoint)
+    
+    m=slope(coin,hole)
+    sslope=m/math.hypot(m,1)
+    cslope=1/math.hypot(m,1)
+    endpos=point(coin.x-cslope*37,coin.y-sslope*37) #random sum of radii
+    l3=line(endpos,point(actualp,-1012))
+    return math.fabs(theta(l2,l3))'''
+    
+hole1=point(0,0)
+hole2=point(1172,0)
+hole3=point(1172,-1171)
+hole4=point(0,-1171)
+
+if coin.x>586 and coin.y>(-980):
+    
+    p1=point(213,-1012)
+    p2=point(953,-1012)
+    l1=line(p1,p2)
+    l2=line(hole2,coin)
+    pos=range(213,953,37)
+    xpoint=intersectx(l1,l2)
+    
+    rpoint=(xpoint-213)/37.0
+    
+    if rpoint<0:
+        actualp=0
+    elif rpoint>20:
+        actualp=20
+    else :
+        actualp=near(rpoint)
+    
+    m=slope(coin,hole2)
+    sslope=m/math.hypot(m,1)
+    cslope=1/math.hypot(m,1)
+    endpos=point(coin.x-cslope*37,coin.y-sslope*37) #random sum of radii
+    l3=line(endpos,point(actualp,-1012))
+    theta=90-math.degrees(math.atan(slope(l3.p1,l3.p2)))    #theta is measured in degrees
+    phi=theta(l2,l3)             #phi is measured in radians
+    
+    
+    len2=dist(hole2,coin)
+    len1=dist(endpos,point(actualp,-1012)
+    mu1=0.1    # co-efficient of friction for coin  
+    mu2=0.1   #co-efficient of friction for striker
+    res=1
+    m1=0.01
+    m2=0.01
+    r1=0.01
+    r2=0.01
+    g=9.8
+    k=0   #parameter to be changed for ideal shot, final kinetic energy
+    
+    v2=math.sqrt(2.0*(k+mu2*m2*g*len2)/m2)
+    v1f=((m1+m2)*v2)/(m1*math.cos(phi)*(1+res))
+    v1=math.sqrt(v1f*v1f+2*mu1*g*len1)
+    
+    ## stepper motor-wale code
+    
+
+
+if coin.x<=586 and coin.y>(-980):
+    
+    p1=point(213,-1012)
+    p2=point(953,-1012)
+    l1=line(p1,p2)
+    l2=line(hole1,coin)
+    pos=range(213,953,37)
+    xpoint=intersectx(l1,l2)
+    
+    rpoint=(xpoint-213)/37.0
+    
+    if rpoint<0:
+        actualp=0
+    elif rpoint>20:
+        actualp=20
+    else :
+        actualp=near(rpoint)
+    
+    m=slope(coin,hole1)
+    sslope=m/math.hypot(m,1)
+    cslope=1/math.hypot(m,1)
+    endpos=point(coin.x-cslope*37,coin.y-sslope*37) #random sum of radii
+    l3=line(endpos,point(actualp,-1012))
+    theta=90-math.degrees(math.atan(slope(l3.p1,l3.p2)))    #theta is measured in degrees
+    phi=theta(l2,l3)             #phi is measured in radians
+    
+    
+    len2=dist(hole2,coin)
+    len1=dist(endpos,point(actualp,-1012)
+    mu1=0.1    # co-efficient of friction for coin  
+    mu2=0.1   #co-efficient of friction for striker
+    res=1
+    m1=0.01
+    m2=0.01
+    r1=0.01
+    r2=0.01
+    g=9.8
+    k=0   #parameter to be changed for ideal shot, final kinetic energy
+    
+    v2=math.sqrt(2.0*(k+mu2*m2*g*len2)/m2)
+    v1f=((m1+m2)*v2)/(m1*math.cos(phi)*(1+res))
+    v1=math.sqrt(v1f*v1f+2*mu1*g*len1)
+    
+    ## stepper motor-wale code
+    
+    

@@ -1,0 +1,7 @@
+/Users/udayanjoshi/Desktop/Abhyas/Project/opencv-3.1.0/build/3rdparty/zlib/CMakeFiles/zlib.dir
+/Users/udayanjoshi/Desktop/Abhyas/Project/opencv-3.1.0/build/3rdparty/libtiff/CMakeFiles/libtiff.dir
+/Users/udayanjoshi/Desktop/Abhyas/Project/opencv-3.1.0/build/3rdparty/libjpeg/CMakeFiles/libjpeg.dir
+/Users/udayanjoshi/Desktop/Abhyas/Project/opencv-3.1.0/build/3rdparty/libwebp/CMakeFiles/libwebp.dir
+/Users/udayanjoshi/Desktop/Abhyas/Project/opencv-3.1.0/build/3rdparty/libjasper/CMakeFiles/libjasper.dir
+/Users/udayanjoshi/Desktop/Abhyas/Project/opencv-3.1.0/build/3rdparty/libpng/CMakeFiles/libpng.dir
+/Users/udayanjoshi/Desktop/Abhyas/Project/opencv-3.1.0/build/3rdparty/openexr/CMakeFiles/IlmImf.dir

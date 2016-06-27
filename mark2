@@ -1,0 +1,31 @@
+import sys
+sys.path.append('/Users/udayanjoshi/opencv/build/lib')
+import cv2
+import numpy as np
+
+img1=cv2.imread('carrom_mod.jpg')  #change this name
+img2=cv2.imread('carrom_mod2.jpg') # change this name
+
+z=cv2.subtract(img1,img2)
+gray=cv2.cvtColor(z, cv2.COLOR_BGR2GRAY)
+image=z
+output=image.copy()
+
+
+
+
+circles1 = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, 1.2, 10, np.array([]), 100, 20, 1, 50)
+# ensure at least some circles were found
+if circles1 is not None:
+	# convert the (x, y) coordinates and radius of the circles to integers
+	circles1 = np.round(circles[0, :]).astype("int")
+ 
+	
+
+print circles1    
+
+
+
+
+
+
