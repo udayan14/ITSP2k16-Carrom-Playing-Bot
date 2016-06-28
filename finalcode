@@ -7,6 +7,7 @@ import cv2
 from pyimagesearch.transform import four_point_transform
 import numpy as np
 
+GPIO.setmode(GPIO.BCM)
 
 xboard=1172
 yboard=-1171
@@ -14,6 +15,8 @@ ystrip=-1012
 xplace1=213
 xplace2=953
 yloc=-980
+
+#image capturing code$$$
 
 vidcap=cv2.VideoCapture()
 vidcap.open(1) #this can be 0,1,2 .just experiment
@@ -25,55 +28,41 @@ x="capimage.jpg"
 gray=cv2.imread(x,0)
 image=cv2.imread(x)
 
-
-
-
-
 circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, 1.2, 20, np.array([]), 100, 50, 5, 50)
 # ensure at least some circles were found
 if circles is not None:
     # convert the (x, y) coordinates and radius of the circles to integers
     circles = np.round(circles[0, :]).astype("int")
-        
-        
-    
-    
-        
-    
+          
 cornercircles=[]
 
 for ( x , y, r ) in circles :
     if r >= 35 and r < 40 :          #these values can change
         cornercircles.append([x,y])
 
+#perspective transform starts here $$$
 
 pts = np.array(cornercircles, dtype = "float32")
 
 # apply the four point tranform to obtain a "birds eye view" of
 # the image
 warped = four_point_transform(image, pts)
-
-# show the original and warped images
-
 cv2.imwrite("a2.jpg", warped)
+
+# image subtraction $$$
 
 img1=cv2.imread('carrom_mod.jpg')  #change this name
 img2=cv2.imread('carrom_mod2.jpg') # change this name
 
 z=cv2.subtract(img1,img2)
 gray1=cv2.cvtColor(z, cv2.COLOR_BGR2GRAY)
-
-
-
-
-
-
 circles1 = cv2.HoughCircles(gray1, cv2.HOUGH_GRADIENT, 1.2, 10, np.array([]), 100, 20, 1, 50)
 # ensure at least some circles were found
 if circles1 is not None:
 	# convert the (x, y) coordinates and radius of the circles to integers
 	circles1 = np.round(circles[0, :]).astype("int")
  
+ #Function and class definition starts here $$$
 	
 class point:
 
@@ -158,6 +147,69 @@ def near(x):
         return int(x)+1
     else:
         return int(x)
+        
+def movehorizontal(x):    #horizontal  x is degrees
+    GPIO.setup(2,GPIO.OUT)  #enable
+    GPIO.setup(3,GPIO.OUT)  #step
+    GPIO.setup(4,GPIO.OUT)  #direction
+    GPIO.setup(17,GPIO.OUT) #VDD
+
+    GPIO.output(2,GPIO.LOW)
+    GPIO.output(4,GPIO.HIGH)
+    GPIO.output(17,GPIO.HIGH)
+
+    degrees=x
+    delay=0.01
+    no_of_steps=near(degrees/1.8)
+
+    for i in range(0,no_of_steps):
+        GPIO.output(3, GPIO.HIGH)
+        time.sleep(delay)
+        GPIO.output(3, GPIO.LOW)
+        time.sleep(delay)
+
+    GPIO.output(2,GPIO.HIGH)
+    GPIO.cleanup()
+    
+
+def rotatebot(x):  #rotational
+    GPIO.setup(14,GPIO.OUT)  #enable
+    GPIO.setup(15,GPIO.OUT)  #step
+    GPIO.setup(18,GPIO.OUT) #direction
+    GPIO.setup(23,GPIO.OUT) #VDD
+
+    GPIO.output(14,GPIO.LOW)
+    GPIO.output(18,GPIO.HIGH)
+    GPIO.output(23,GPIO.HIGH)
+
+    degrees=x   
+    delay=0.01
+    no_of_steps=degrees/1.8
+
+    for i in range(0,no_of_steps):
+        GPIO.output(15, GPIO.HIGH)
+        time.sleep(delay)
+        GPIO.output(15, GPIO.LOW)
+        time.sleep(delay)
+
+    GPIO.output(14,GPIO.HIGH)
+    GPIO.cleanup()
+    
+def strike():     #striking mechanism
+    GPIO.setup(25, GPIO.OUT)
+    GPIO.setup(8, GPIO.OUT)
+    GPIO.setup(7, GPIO.OUT)
+    GPIO.setup(12,GPIO.OUT)
+    
+    GPIO.output(7,GPIO.HIGH)    #enable
+    GPIO.output(12,HIGH)
+    GPIO.output(25,GPIO.HIGH)
+    GPIO.output(8,GPIO.LOW)
+
+    time.delay(2)
+
+    GPIO.cleanup()
+
 
 
 hole1=point(0,0)
@@ -165,11 +217,9 @@ hole2=point(xboard,0)
 hole3=point(xboard,yboard)
 hole4=point(0,yboard)
 
-#coin=point(circles1[0],-circles1[1])
-coin=point(600,-600) #random ,delete this
+coin=point(circles1[0],-circles1[1])
 
-
-'''The co-ordinates of the holes are (0,0),(0,-1171),(1172,0),(1172,-1171) ***(these nums will change later)*** . The co-ordinates of the end-points strip are (213,-1012) and (953,-1012)'''
+#Shot selection starts here and we also make the shot$$$
 
 
 if coin.x>xboard/2.0 and coin.y>yloc:
@@ -214,7 +264,10 @@ if coin.x>xboard/2.0 and coin.y>yloc:
     v1f=((m1+m2)*v2)/(m1*math.cos(phi)*(1.0+res))
     v1=math.sqrt(v1f*v1f+2.0*mu1*g*len1)
     
-    ## stepper motor-wale code
+    
+    movehorizontal(steplen(rpoint))
+    rotatebot(theta)
+    strike()
     
 
 
@@ -262,6 +315,8 @@ elif coin.x<=xboard/2 and coin.y>(yloc):
     v1f=((m1+m2)*v2)/(m1*math.cos(phi)*(1+res))
     v1=math.sqrt(v1f*v1f+2*mu1*g*len1)
     
-    ## stepper motor-wale code
+    movehorizontal(steplen(rpoint))
+    rotatebot(theta)
+    strike()
    
 
