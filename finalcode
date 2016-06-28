@@ -206,7 +206,7 @@ def strike():     #striking mechanism
     GPIO.output(25,GPIO.HIGH)
     GPIO.output(8,GPIO.LOW)
 
-    time.delay(2)
+    time.sleep(2)
 
     GPIO.cleanup()
 
@@ -264,9 +264,11 @@ if coin.x>xboard/2.0 and coin.y>yloc:
     v1f=((m1+m2)*v2)/(m1*math.cos(phi)*(1.0+res))
     v1=math.sqrt(v1f*v1f+2.0*mu1*g*len1)
     
-    
+    time.sleep(1)
     movehorizontal(steplen(rpoint))
+    time.sleep(1)
     rotatebot(theta)
+    time.sleep(1)
     strike()
     
 
@@ -314,9 +316,11 @@ elif coin.x<=xboard/2 and coin.y>(yloc):
     v2=math.sqrt(2.0*(k+mu2*m2*g*len2)/m2)
     v1f=((m1+m2)*v2)/(m1*math.cos(phi)*(1+res))
     v1=math.sqrt(v1f*v1f+2*mu1*g*len1)
-    
+    time.sleep(1)
     movehorizontal(steplen(rpoint))
+    time.sleep(1)
     rotatebot(theta)
+    time.sleep(1)
     strike()
    
 

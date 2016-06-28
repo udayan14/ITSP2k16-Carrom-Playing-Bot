@@ -63,6 +63,6 @@ def strike()     #striking mechanism
     GPIO.output(25,GPIO.HIGH)
     GPIO.output(8,GPIO.LOW)
 
-    time.delay(2)
+    time.sleep(2)
 
     GPIO.cleanup()
