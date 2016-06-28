@@ -3,9 +3,9 @@ import time
 
 GPIO.setmode(GPIO.BCM)
 
-motion=input()
 
-if motion==0:    #horizontal
+
+def movehorizontal(x):    #horizontal  x is degrees
     GPIO.setup(2,GPIO.OUT)  #enable
     GPIO.setup(3,GPIO.OUT)  #step
     GPIO.setup(4,GPIO.OUT)  #direction
@@ -15,7 +15,7 @@ if motion==0:    #horizontal
     GPIO.output(4,GPIO.HIGH)
     GPIO.output(17,GPIO.HIGH)
 
-    degrees=input()
+    degrees=x
     delay=0.01
     no_of_steps=near(degrees/1.8)
 
@@ -26,8 +26,10 @@ if motion==0:    #horizontal
         time.sleep(delay)
 
     GPIO.output(2,GPIO.HIGH)
+    GPIO.cleanup
+    
 
-elif motion==1:  #rotational
+def rotatebot(x):  #rotational
     GPIO.setup(14,GPIO.OUT)  #enable
     GPIO.setup(15,GPIO.OUT)  #step
     GPIO.setup(18,GPIO.OUT) #direction
@@ -37,7 +39,7 @@ elif motion==1:  #rotational
     GPIO.output(18,GPIO.HIGH)
     GPIO.output(23,GPIO.HIGH)
 
-    degrees=input()
+    degrees=x
     delay=0.01
     no_of_steps=degrees/1.8
 
@@ -48,8 +50,9 @@ elif motion==1:  #rotational
         time.sleep(delay)
 
     GPIO.output(14,GPIO.HIGH)
-
-elif motion==2:     #striking mechanism
+    GPIO.cleanup()
+    
+def strike()     #striking mechanism
     GPIO.setup(25, GPIO.OUT)
     GPIO.setup(8, GPIO.OUT)
     GPIO.setup(7, GPIO.OUT)
@@ -62,5 +65,4 @@ elif motion==2:     #striking mechanism
 
     time.delay(2)
 
-else:
-    print "error"
+    GPIO.cleanup()
