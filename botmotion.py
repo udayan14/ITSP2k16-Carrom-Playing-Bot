@@ -26,7 +26,7 @@ def movehorizontal(x):    #horizontal  x is degrees
         time.sleep(delay)
 
     GPIO.output(2,GPIO.HIGH)
-    GPIO.cleanup
+    GPIO.cleanup()
     
 
 def rotatebot(x):  #rotational
