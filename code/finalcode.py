@@ -16,7 +16,7 @@ xplace1=213
 xplace2=953
 yloc=-980
 
-#image capturing code$$$
+#image capturing code
 
 vidcap=cv2.VideoCapture()
 vidcap.open(1) #this can be 0,1,2 .just experiment
@@ -28,19 +28,13 @@ x="capimage.jpg"
 gray=cv2.imread(x,0)
 image=cv2.imread(x)
 
-circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, 1.2, 20, np.array([]), 100, 50, 5, 50)
-# ensure at least some circles were found
-if circles is not None:
-    # convert the (x, y) coordinates and radius of the circles to integers
-    circles = np.round(circles[0, :]).astype("int")
+
           
-cornercircles=[]
+cornercircles=[]   ##add co-ordinates later
 
-for ( x , y, r ) in circles :
-    if r >= 35 and r < 40 :          #these values can change
-        cornercircles.append([x,y])
 
-#perspective transform starts here $$$
+
+#perspective transform starts here
 
 pts = np.array(cornercircles, dtype = "float32")
 
@@ -51,8 +45,8 @@ cv2.imwrite("a2.jpg", warped)
 
 # image subtraction $$$
 
-img1=cv2.imread('carrom_mod.jpg')  #change this name
-img2=cv2.imread('carrom_mod2.jpg') # change this name
+img1=cv2.imread('a1.jpg')  #change this name
+img2=cv2.imread('a2.jpg') # change this name
 
 z=cv2.subtract(img1,img2)
 gray1=cv2.cvtColor(z, cv2.COLOR_BGR2GRAY)
@@ -62,7 +56,7 @@ if circles1 is not None:
 	# convert the (x, y) coordinates and radius of the circles to integers
 	circles1 = np.round(circles[0, :]).astype("int")
  
- #Function and class definition starts here $$$
+ #Class definition starts here 
 	
 class point:
 
@@ -132,13 +126,10 @@ def theta(l1,l2):
     angle=(m1-m2)/(1.0+m1*m2)
     return math.degrees(math.atan(angle))
 def actual(x):
-    return 1*x       #change 1 to metres per pixel
+    return x*0.435/(xplace2-xplace1)      #change 1 to                                      #metres per pixel
     
-def steplen(x):
-    init= 0.1    #change this
-     
-    r=0.01          #change this
-    return actual(init+x)/r      
+def numsteps(x):
+    return (x/8.3)*(360/1.8)
     
 
 
@@ -148,7 +139,8 @@ def near(x):
     else:
         return int(x)
         
-def movehorizontal(x):    #horizontal  x is degrees
+        
+def movehorizontal(x):    
     GPIO.setup(2,GPIO.OUT)  #enable
     GPIO.setup(3,GPIO.OUT)  #step
     GPIO.setup(4,GPIO.OUT)  #direction
@@ -158,9 +150,9 @@ def movehorizontal(x):    #horizontal  x is degrees
     GPIO.output(4,GPIO.HIGH)
     GPIO.output(17,GPIO.HIGH)
 
-    degrees=x
+    
     delay=0.01
-    no_of_steps=near(degrees/1.8)
+    no_of_steps=x
 
     for i in range(0,no_of_steps):
         GPIO.output(3, GPIO.HIGH)
@@ -168,8 +160,7 @@ def movehorizontal(x):    #horizontal  x is degrees
         GPIO.output(3, GPIO.LOW)
         time.sleep(delay)
 
-    GPIO.output(2,GPIO.HIGH)
-    GPIO.cleanup()
+    
     
 
 def rotatebot(x):  #rotational
@@ -192,25 +183,33 @@ def rotatebot(x):  #rotational
         GPIO.output(15, GPIO.LOW)
         time.sleep(delay)
 
-    GPIO.output(14,GPIO.HIGH)
-    GPIO.cleanup()
+    
+    
     
 def strike():     #striking mechanism
-    GPIO.setup(25, GPIO.OUT)
-    GPIO.setup(8, GPIO.OUT)
-    GPIO.setup(7, GPIO.OUT)
-    GPIO.setup(12,GPIO.OUT)
+    GPIO.setup(10, GPIO.OUT)
+    GPIO.setup(9, GPIO.OUT)
+    GPIO.setup(11, GPIO.OUT)
+    GPIO.setup(5,GPIO.OUT)
     
-    GPIO.output(7,GPIO.HIGH)    #enable
-    GPIO.output(12,HIGH)
-    GPIO.output(25,GPIO.HIGH)
-    GPIO.output(8,GPIO.LOW)
+    GPIO.output(10,GPIO.HIGH)    #enable
+    GPIO.output(5,GPIO.HIGH)          #VDD
+    
+    GPIO.output(9,GPIO.LOW)
+    GPIO.output(11,GPIO.LOW)
+    time.sleep(3)
+    
+    GPIO.output(9,GPIO.HIGH)
+    GPIO.output(11,GPIO.LOW)
+    time.sleep(1)
 
-    time.sleep(2)
 
+def clean():            #diabling all ic's 
+                        #clearing all gpio pins
+    GPIO.output(2,GPIO.HIGH)
+    GPIO.output(14,GPIO.HIGH)
+    GPIO.output(5,GPIO,LOW)
     GPIO.cleanup()
-
-
 
 hole1=point(0,0)
 hole2=point(xboard,0)
@@ -265,7 +264,7 @@ if coin.x>xboard/2.0 and coin.y>yloc:
     v1=math.sqrt(v1f*v1f+2.0*mu1*g*len1)
     
     time.sleep(1)
-    movehorizontal(steplen(rpoint))
+    movehorizontal(numsteps(actual(rpoint-xplace1)))
     time.sleep(1)
     rotatebot(theta)
     time.sleep(1)
@@ -316,11 +315,12 @@ elif coin.x<=xboard/2 and coin.y>(yloc):
     v2=math.sqrt(2.0*(k+mu2*m2*g*len2)/m2)
     v1f=((m1+m2)*v2)/(m1*math.cos(phi)*(1+res))
     v1=math.sqrt(v1f*v1f+2*mu1*g*len1)
+    
+    
+    
     time.sleep(1)
-    movehorizontal(steplen(rpoint))
+    movehorizontal(numsteps(actual(rpoint-xplace1)))
     time.sleep(1)
     rotatebot(theta)
     time.sleep(1)
     strike()
-   
-

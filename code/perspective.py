@@ -14,7 +14,7 @@ output=image.copy()
 
 
 
-circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, 1.2, 20, np.array([]), 100, 50, 5, 50)
+circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, 1.2, 400, np.array([]), 100, 5, 12, 16)
 # ensure at least some circles were found
 if circles is not None:
     # convert the (x, y) coordinates and radius of the circles to integers
@@ -32,18 +32,15 @@ if circles is not None:
 cornercircles=[]
 
 for ( x , y, r ) in circles :
-    if r >= 35 and r < 40 :
-        cornercircles.append([x,y])
+    cornercircles.append([x,y])
 
 
 pts = np.array(cornercircles, dtype = "float32")
-
+print pts
 # apply the four point tranform to obtain a "birds eye view" of
 # the image
 warped = four_point_transform(image, pts)
 
 # show the original and warped images
 
-cv2.imwrite("a2.jpg", warped)
-
-
+cv2.imwrite("b1.jpg", warped)

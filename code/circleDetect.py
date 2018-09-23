@@ -13,7 +13,7 @@ print image.shape
 
 
 
-circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, 1.2, 20, np.array([]), 100, 50, 5, 50)
+circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, 1.2, 20, np.array([]), 100, 30, 10, 20)
 # ensure at least some circles were found
 if circles is not None:
 	# convert the (x, y) coordinates and radius of the circles to integers
